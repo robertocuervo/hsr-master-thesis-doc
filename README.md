@@ -5,9 +5,15 @@ The root folder contains:
 
 ## dev_project
 
+This folder contains the source code in form of a Visual Studio 2015 solution. In order to set up the project you need to move the ```OpenGLlibs``` folder to  ```C:``` first. Then you can open the Visual Studio solution in ```BachelorProject```
 
+Folders:
+
+* ```BachelorProject```
+* ```OpenGLlibs```
 
 ## documentation
+
 
 
 ## executable_project
