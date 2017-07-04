@@ -1,5 +1,6 @@
-# Jaw Viewer Master Thesis Documentation
-Repository for the Documentation of the Master Thesis of Roberto Cuervo and Konrad Höpli
+# Jaw Viewer Bachelor Thesis Documentation
+
+Repository for the Documentation of the Bachelor Thesis of Roberto Cuervo and Konrad Höpli at the HSR Rapperswil in Switzerland.
 
 The root folder contains:
 
@@ -15,6 +16,8 @@ Folders:
 ## documentation
 
 Bachelor report and another documents
+
+* ```report_latex```: as its names indicates, contains the bachelor report int LaTex
 
 ## executable_project
 
