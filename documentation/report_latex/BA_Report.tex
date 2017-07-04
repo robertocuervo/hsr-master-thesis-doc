@@ -1,0 +1,54 @@
+ \input{00config}
+
+%BEGIN DOCUMENT
+\begin{document}	
+	\input{header}
+	%Table of contents
+	\renewcommand*\contentsname{Table of Contents}
+	{\hypersetup{linkcolor=black}\tableofcontents}
+	\newpage
+
+	%Chapters
+
+	\include{01abstract}
+	\include{02terms_of_reference}
+	\include{03management_summary}
+	\include{04analysis}
+	\include{051technical_report}
+	\include{052implementation}
+	
+	%Appendix
+	\begin{appendices}
+		\include{project_planning}
+		\include{software_documentation}
+		\include{field_report}
+		\include{legal}
+		\include{movement_in_r3}
+	\end{appendices}
+
+
+
+
+	
+	%Table of images
+	\renewcommand*\listfigurename{Table of Images}
+	{\hypersetup{linkcolor=black}\listoffigures}
+	\newpage
+	%Table of tables
+	{\hypersetup{linkcolor=black}\listoftables}
+	\newpage
+	
+	% Table of code examples
+	\addcontentsline{toc}{section}{Listings}
+	{\hypersetup{linkcolor=black}\lstlistoflistings}
+	\newpage
+	%Glossary
+	\glossarystyle{altlist}
+	\printglossary[title=Glossary, toctitle=Glossary]
+	\newpage
+	%Bibliography
+	\bibliographystyle{unsrt}
+	\bibliography{bibliography}
+	
+	
+\end{document}

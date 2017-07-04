@@ -1,0 +1,141 @@
+\documentclass[a4paper]{article}
+%Usage
+\usepackage{datetime} 
+\usepackage{amsmath}
+\usepackage{titlesec}
+\usepackage{mathptmx}
+\usepackage{hyperref}
+\usepackage{graphicx, wrapfig}
+\usepackage{caption}
+\usepackage{subcaption}
+\graphicspath{ {images/} }
+\usepackage{verbatim}
+\usepackage{geometry}
+\usepackage{wrapfig}
+\geometry{a4paper, top=1cm, bottom=1cm, margin=1.5cm , headheight=12.5pt}
+\usepackage{booktabs}
+\usepackage[latin1]{inputenc}
+\usepackage[nottoc]{tocbibind}
+\usepackage{pxfonts}
+\usepackage{tabularx}
+\usepackage{amssymb}
+\usepackage{listings}	% for code styling
+\usepackage{xcolor} 	% for setting colors
+\usepackage{url}
+\usepackage{wrapfig}
+\usepackage{amsmath,amssymb,enumitem,mathtools}
+\usepackage{xcolor}
+\usepackage{wrapfig}
+\usepackage{forest}
+
+\usepackage[page, toc,titletoc,title]{appendix}
+
+%Forest package configurations
+\definecolor{folderbg}{RGB}{124,166,198}
+\definecolor{folderborder}{RGB}{110,144,169}
+
+\def\Size{4pt}
+\tikzset{
+	folder/.pic={
+		\filldraw[draw=folderborder,top color=folderbg!50,bottom color=folderbg]
+		(-1.05*\Size,0.2\Size+5pt) rectangle ++(.75*\Size,-0.2\Size-5pt);  
+		\filldraw[draw=folderborder,top color=folderbg!50,bottom color=folderbg]
+		(-1.15*\Size,-\Size) rectangle (1.15*\Size,\Size);
+	}
+}
+
+
+
+%Change color of citation links
+\hypersetup{
+	colorlinks   = true, %Colours links instead of ugly boxes
+	urlcolor     = blue, %Colour for external hyperlinks
+	linkcolor    = {red!50!black}, %Colour of internal links
+	citecolor   = blue %Colour of citations
+}
+% Change color of citation text
+\newcommand\hl[1]{%
+	\bgroup
+	\hskip0pt\color{blue!80!black}%
+	#1%
+	\egroup
+}
+
+\hypersetup{
+	pdftitle={Bachelor Thesis},    % title
+	pdfauthor={Roberto Cuervo Alvarez, Konrad Hoepli},     % author
+	pdfsubject={Bachelor Thesis},   % subject of the document
+	pdfcreator={pdftex}  % creator of the document
+}
+%Glossary
+\usepackage[nomain, acronym, toc, automake]{glossaries-extra}
+\makeglossaries
+
+%Header and Footer
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\fancyhead[RO,LE]{\thepage}
+\fancyhead[LO]{\leftmark}
+\fancyhead[RE]{\rightmark}
+\cfoot{Bachelor Thesis}
+\lfoot{Roberto Cuervo, Konrad H\"opli}
+\rfoot{\ddmmyyyydate\today}
+\renewcommand{\headrulewidth}{0.4pt}
+\renewcommand{\footrulewidth}{0.4pt}
+%End Header and Footer
+
+%Custom subsubsubsection heading
+\titleclass{\subsubsubsection}{straight}[\subsection]
+
+\newcounter{subsubsubsection}[subsubsection]
+\renewcommand\thesubsubsubsection{\thesubsubsection.\arabic{subsubsubsection}}
+\renewcommand\theparagraph{\thesubsubsubsection.\arabic{paragraph}} % optional; useful if paragraphs are to be numbered
+
+\titleformat{\subsubsubsection}
+{\normalfont\normalsize\bfseries}{\thesubsubsubsection}{1em}{}
+\titlespacing*{\subsubsubsection}
+{0pt}{3.25ex plus 1ex minus .2ex}{1.5ex plus .2ex}
+
+\makeatletter
+\renewcommand\paragraph{\@startsection{paragraph}{5}{\z@}%
+	{3.25ex \@plus1ex \@minus.2ex}%
+	{-1em}%
+	{\normalfont\normalsize\bfseries}}
+\renewcommand\subparagraph{\@startsection{subparagraph}{6}{\parindent}%
+	{3.25ex \@plus1ex \@minus .2ex}%
+	{-1em}%
+	{\normalfont\normalsize\bfseries}}
+\def\toclevel@subsubsubsection{4}
+\def\toclevel@paragraph{5}
+\def\toclevel@paragraph{6}
+\def\l@subsubsubsection{\@dottedtocline{4}{7em}{4em}}
+\def\l@paragraph{\@dottedtocline{5}{10em}{5em}}
+\def\l@subparagraph{\@dottedtocline{6}{14em}{6em}}
+\makeatother
+
+\setcounter{secnumdepth}{4}
+\setcounter{tocdepth}{4}
+%End Custom subsubsubsection heading
+
+
+% Table Stylings
+\newcommand*\heading[1]{\bfseries{#1}}
+\newcommand*\beforeheading{\toprule}
+\newcommand*\afterheading{\midrule}
+\newcommand*\normalline{}
+\newcommand*\lastline{\bottomrule}
+
+%C++ Code Styling
+\lstset{
+	frame=tb, 								% draw a frame at the top and bottom of the code block
+	tabsize=4, 								% tab space width
+	showstringspaces=false, 				% don't mark spaces in strings
+	numbers=left, 							% display line numbers on the left
+	commentstyle=\color{green!50!black}, 	% comments color 
+	keywordstyle=\color{blue}, 				% keyword color
+	stringstyle=\color{red}, 				% string color
+	basicstyle=\ttfamily					% font
+}
+
+%Glossary document import
+\input{glossary}

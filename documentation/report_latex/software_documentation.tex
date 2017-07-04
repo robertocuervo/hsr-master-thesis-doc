@@ -1,0 +1,53 @@
+\section{Software Documentation}
+
+\subsection{Development Setup}
+
+
+In order to facilitate further development of the \emph{Jaw Viewer} we created a Github repository\footnote{\url{https://github.com/robertocuervo/hsr-master-thesis-doc}} containing all the necessary resources (source code, documentation, etc).
+
+The repository's file structure is: 
+
+ \begin{forest}
+ 	for tree={
+ 		font=\ttfamily,
+ 		grow'=0,
+ 		child anchor=west,
+ 		parent anchor=south,
+ 		anchor=west,
+ 		calign=first,
+ 		inner xsep=7pt,
+ 		edge path={
+ 			\noexpand\path [draw, \forestoption{edge}]
+ 			(!u.south west) +(7.5pt,0) |- (.child anchor) pic {folder} \forestoption{edge label};
+ 		},
+ 		before typesetting nodes={
+ 			if n=1
+ 			{insert before={[,phantom]}}
+ 			{}
+ 		},
+ 		fit=band,
+ 		before computing xy={l=15pt},
+ 	}  
+ 	[
+ 	[dev\_project
+ 	[BachelorProject
+ 	]
+ 	[OpenGLlibs
+ 	]
+ 	]
+ 	[documentation
+ 	]
+ 	[executable\_project
+ 	]
+ 	]
+ \end{forest}
+
+The setup of the source code project in Windows is straight on. It is just necessary to clone the repository, move the directory \verb|OpenGLlibs| to \verb|C:|, open the Visual Studio Solution contained in \verb|BachelorProject| and build it.
+
+
+\subsection{Installation}
+
+
+The installation of \emph{Jaw Viewer} in Windows is also very simple. You can import the source code to Visual Studio and build the source code (as Release) as described above. Then you must look for the directory \verb|Release| in the Visual Studio project and locate the \verb|GUI| and \verb|main| executable files (\verb|.exe|). You can then move this two files to your preferred location. In order to run \emph{Jaw Viewer} you just have to double click on the \verb|GUI.exe| file.
+
+Alternatively you can also clone the repository. Then you just need to copy the both \verb|GUI| and \verb|main| executable files (\verb|.exe|) contained in the \verb|executable_project| directory to the desired location.

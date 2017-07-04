@@ -1,0 +1,120 @@
+\section{Project Management}
+This document contains valuable information regarding the planning of the project and other important tasks related to that.
+
+\subsection{Risks}
+This chapter contains the biggest subjects regarding risks encountered and the decision making involved.
+\begin{itemize}
+	\item C++ \newline
+	In the very beginning of the project, after developing a prototype based on the given tutorial, we decided to keep using that prototype and therewith sticking with \verb|C++| as the primary programming language. Our lack of experience in development of both this programming language and \gls{opengl} were suboptimal, but heavily favored after considering the use of a wrapping library for OpenGL in a more comfortable language for us (\verb|C#|) due to the possibility to discover that some features needed by us were not feasible after all.	
+	\item WinForms \newline
+	Since the Clinic primarily uses both the Windows operating system and VisualStudio, we decided on using WindowsForms for the graphical unit interface even though the integration process of an OpenGL application into that was only vaguely researched and not previously done by either of the developers involved.
+	\item Self-implemented filereading \newline
+	Although the prototype created after following the tutorial already supported the import of STL files via an external library, we decided to implement our own. This decision was heavily influenced by the size of the external library (ASSIMP) in comparison to our small usage and the already expected task to implement our own file-reader for the proprietary MVM format used by the clinic for the movement files.
+\end{itemize}
+
+\subsection{Project Planning}
+The \emph{Jaw Viewer} project was run following agile principles, with scrum \cite{scrum} as development strategy and some milestones as reference points. Due to illness of one team member the usual 14 sprints \cite{sprint} were extended to 18. The sprints have a duration of a week, with 26 working hours each. Thanks to the extension, now there are 19 weeks between the 20.02.2017 and the new deadline 30.06.17.
+
+\subsubsection{Milestones}
+
+The milestones mark the end of an implementation phase, the completion of a use case or feature, or an event like the interim presentation. Between the milestones the work procedure is agile, with weekly sprint planings and reviews. The dates in the table below are indicative. 
+
+\begin{table}[h!] 
+	\begin{center}
+			\begin{tabular}{ p{1.3cm}||p{3.4cm}|p{1cm}| }\beforeheading
+	\heading{\textbf{Milestone}} & \heading{\textbf{Description} }   & \heading{\textbf{Date}}	\\\afterheading
+		ML1	&	OpenGL Tutorial  			& 28.2.17     \\\normalline
+		ML2	&	Import STL files            & 17.3.17     \\\normalline
+		ML3	& 	Import MVM files			& 26.3.17      \\\normalline
+		ML4	& 	Display Movement			& 9.4.17      \\\normalline
+		ML5	& 	Interim presentation 	 	& 10.4.17     \\\normalline		
+		ML6	& 	Reverse Engineering		  	&  --     \\\normalline
+		ML7	& 	Refactoring	    			&  --   \\\normalline
+		ML8	& 	GUI       	 	    		&  -- 	\\\normalline
+		ML9	& 	Perspective       	 	    &  --    \\\normalline
+		ML10& 	Documentation       	 	& 30.6.17    \\\lastline
+
+		\end{tabular}
+		\caption{Milestones}
+	\end{center}
+\end{table}
+
+Until the interim presentation the project went as planned, with small delays between milestones caused above all by our lack of experience with \verb|C++| and \gls{opengl}. The next milestones after the presentation were the implementation of the graphical user interface (GUI) and the improvement of the screen controls. But, as already mentioned, due to the confusing information from the Clinic we had to invest a big amount of time into trying discover the cause of the inaccurate display of the calculated movement (please, see \ref{reverse-engineering} Reverse Engineering). 
+
+At some point Prof. Augenstein told us to stop the search and to continue with the development of our application because we were not getting where we needed to be. Following that advice, we initiated the necessary refactoring of our library component and then started with the integration into the WindowsForms (\verb|C#|) GUI. 
+Our lack of experience especially regarding \verb|C++| made it basically necessary for us to do a refactoring and also ended up being more time consuming than expected since the complexity of our component exceeded the base provided by the tutorial by far at that point.
+The search of a suitable interface between the \verb|C++| OpenGL core and the \verb|C#| GUI took also much more time as planned because the initially researched way to achieve that goal using the \verb|Common Language Runtime (CLR)| by Microsoft did not work with our project specifically. The most likely cause for that failure were the various external dependencies. 
+At this point we begun the preparation (mathematical foundations) for the change of controls, since that was the last of the most desired features we identified, when Konrad H\"opli got ill. During his illness, Roberto Cuervo begun with the report, setting the infrastructure (LaTex) and the first report draft. 
+
+After his illness, Konrad H\"opli primarily continued with the GUI and perspective development. The present report was elaborated and finished by both of the involved students though.
+
+
+\subsubsection{Expected Amount of Work}
+
+The theoretical amount of work measured in work hours is:
+
+\begin{itemize}
+	\item Effort per Week: 52 hours
+	\item Total planned effort: 52 hours * 14 Weeks = \textbf{728 Hours}
+	\item Total planned effort per student: 728 hours / 2 = \textbf{364 Hours}
+\end{itemize}
+
+Until the official deadline on the 16.06.17 there are 14 working weeks plus 2 weeks dedicated to the documentation.
+
+\subsubsection{Effective Amount of Work}
+
+During the project we planned the tasks in Visual Studio Team Services \cite{visualstudioteamservices} and booked the corresponding time in hours, resulting in:
+
+
+\begin{table}[h!] 
+	\begin{center}
+		\begin{tabular}{ p{1.3cm}|| p{2.6cm}| p{2.5cm} |}\beforeheading
+			\heading{\textbf{Week}} & \heading{\textbf{Roberto Cuervo}}& \heading{\textbf{Konrad H\"opli} }  	\\\afterheading
+			1	      		& 27.8      	&	--\\\normalline
+			2               & 30.75			&	-- \\\normalline
+			3               & 14.5			&	-- \\\normalline
+			4               & 40.5			&	--\\\normalline
+			5               & 27.75			&	--\\\normalline
+			6               & 8.75			&	--\\\normalline
+			7               & 35.75			&	--\\\normalline
+			8               & 23			&	--\\\normalline
+			9               & 29.5			&	--\\\normalline
+			10    	 	    & 27			&	--\\\normalline
+			11    	 	    & 28.75			&	--\\\normalline
+			12    	 	    & 24			&	--\\\normalline
+			13    	 	    & 22.75			&	--\\\normalline
+			14    	 	    & 46			&	--\\\normalline
+			15    	 	    & 32.5			&	--\\\normalline
+			16    	 	    & 16.25			&	--\\\normalline
+			17    	 	    & 15			&	--\\\normalline
+			18    	 	    & 14.5			&	--\\\normalline
+			19    	 	    & 40.75			&	--\\\lastline
+	\textbf{Average}	 	 & 26.6			&	--\\\lastline
+	\textbf{Total}    	 	& 505.8 hours	&	--\\\lastline
+		\end{tabular}
+		\caption{Weekly Amount of work}
+	\end{center}
+\end{table}
+
+
+
+
+\begin{table}[h!] 
+	\begin{center}
+		\begin{tabular}{ p{2.5cm}||p{2.3cm}| }\beforeheading
+			\heading{\textbf{Student}} & \heading{\textbf{Effort / Hours} }  	\\\afterheading
+			Konrad H\"opli	      		&  --     	\\\normalline
+			Roberto Cuervo              & 505.8       \\\lastline
+			\textbf{Total}    	 	    & 			\\\lastline
+		\end{tabular}
+		\caption{Amount of work}
+	\end{center}
+\end{table}
+
+
+In general the planned amount of work corresponded to the effective\footnote{Hours of Konrad H\"opli empty due to illness} work. The most laborious tasks were the programming tasks in \verb|C++|, the comprehension of the mathematical foundations and the elaboration of the documentation, activities to whom we dedicated bigger amount of hours. 
+
+
+
+
+
