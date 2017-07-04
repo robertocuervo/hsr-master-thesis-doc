@@ -18,3 +18,4 @@ Bachelor report and another documents
 
 ## executable_project
 
+Contains the two executable files ```GUI.exe``` and ```main.exe``` which form *Jaw Viewer*.  In Windows you can clone the repository and the move this files to your preferred location. In order to run *Jaw Viewer* you just need to double click on the ```GUI.exe``` file.
