@@ -1,0 +1,10 @@
+solid Y:/#TEMP/Amira_database/Lea_Cedric/lc_15_01-files/export_to_TmjViewer_14/FR2.remeshed2.surf_rot (2254 triangles, 1129 nodes)
+  facet normal 0.331301 -0.921820 -0.201214
+  outer loop
+    vertex   13.449456 19.596155 51.654320
+    vertex   14.683020 19.940157 52.109425
+    vertex   14.093437 19.483467 53.230896
+  endloop
+endfacet
+endsolid
+

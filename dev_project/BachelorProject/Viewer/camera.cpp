@@ -70,10 +70,13 @@ void Camera::ProcessMouseMovement(GLfloat xoffset, GLfloat yoffset, const GLbool
 }
 
 void Camera::ProcessMouseScroll(const GLfloat yoffset) {
-	if (yoffset > 0)
+	/*NON-ZOOM-Version
+	 *if (yoffset > 0)
 		this->Position += this->Front * 10.0f;
 	else
-		this->Position -= this->Front * 10.0f;
+		this->Position -= this->Front * 10.0f;*/
+
+	this->updateCameraVectors();
 }
 
 void Camera::updateCameraVectors() {

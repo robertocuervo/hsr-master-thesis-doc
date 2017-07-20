@@ -4,17 +4,13 @@
 #include <vector>
 #include <glew/glew.h>
 #include <glm/detail/type_vec3.hpp>
+#include "../common/json_reader.h"
 
-struct ConfigurationData {
+class ConfigurationData {
+public:
 	static constexpr const char* windowName = "JawBone Visualizer";
-//	static const char* pathToMvmFile;
-	static  std::string pathToMvmFile;
-//	static const char* pathToMvmRefFile;
-	static  std::string pathToMvmRefFile;
 	static constexpr const GLchar* vertexPath = "../Viewer/loading.vert";
 	static constexpr const GLchar* fragmentPath = "../Viewer/loading.frag";
-	static double frequency;
-	static bool displayReferenceCube;
 	static constexpr const char* uniformModel = "model";
 	static constexpr const char* uniformViewPos = "viewPos";
 	static constexpr const char* uniformProjection = "projection";
@@ -33,17 +29,23 @@ struct ConfigurationData {
 	static constexpr const GLfloat SPEED = 3.0f;
 	static constexpr const GLfloat SENSITIVTY = 0.25f;
 	static constexpr const GLfloat ZOOM = 45.0f;
+	static JsonReader jsonReader;
+	static std::string getPathToMvmFile();
+	static std::string getPathToMvmRefFile();
+	static double getFrequency();
+	static bool getDisplayReferenceCube();
 
-	static glm::vec3 referenceSphere1;
-	static glm::vec3 referenceSphere2;
-	static glm::vec3 referenceSphere3;
-	static glm::vec3 calibrationVertex1;
-	static glm::vec3 calibrationVertex2;
-	static glm::vec3 calibrationVertex3;
+	static glm::vec3 getReferenceSphere1();
+	static glm::vec3 getReferenceSphere2();
+	static glm::vec3 getReferenceSphere3();
+	static glm::vec3 getCalibrationVertex1();
+	static glm::vec3 getCalibrationVertex2();
+	static glm::vec3 getCalibrationVertex3();
 
-	static std::vector<std::string> stlFiles;
-	static GLuint screenWidth;
-	static GLuint screenHeight;
+	static std::vector<std::string> getStlFilesPaths();
+	static GLuint getScreenWidth();
+	static GLuint getScreenHeight();
+	static void parseConfigFile(const std::string pathToJsonFile);
 };
 
 #endif

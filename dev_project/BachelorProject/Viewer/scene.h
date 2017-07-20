@@ -49,14 +49,12 @@ private:
 	*/
 	void setupShader(const GLchar* vertexPath, const GLchar* fragmentPath);
 	void generateTargetFrames(const std::string pathToMvmFile, const std::string pathToMvmRefFile);
-//	void generateTargetFrames(const char* pathToMvmFile, const char* pathToMvmRefFile);
 	void loadMeshesFromStlFiles(const std::vector<std::string> stl_files);
 	void translateModel(const Shader shader, glm::mat4 transformationMatrix) const;
 	void clearColorBuffer(const GLclampf red, const GLclampf green, const GLclampf blue, const GLclampf alpha) const;
 	void setLightsProperties() const;
 	void setMaterialProperties() const;
 	void drawMeshes(const Shader shader, const TargetFrame targetFrame) const;
-
 	void setFrameTime();
 	void setLightDirectionlocation() const;
 	size_t getFrameIndex(const GLfloat currentTime);

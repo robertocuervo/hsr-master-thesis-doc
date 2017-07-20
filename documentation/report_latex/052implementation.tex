@@ -396,16 +396,20 @@ Prof. Augenstein then came up with another theory based on a new set of demo dat
 
 
 \subsubsection{Perspective, Movement and Rotation}
-This chapter\footnote{Not completed because of Konrad H\"opli's illness} focuses on explaining the implemented overhaul of the used perspective and navigation within the OpenGL component of the \verb|Jaw Viewer|. It mainly consists of a theoretical explanation of the individual aspects followed by the mathematical foundations behind it.
+This chapter focuses on explaining the implemented overhaul of the used perspective and navigation within the OpenGL component of the \verb|Jaw Viewer|. It mainly consists of a theoretical explanation of the individual aspects followed by the mathematical foundations behind it.
 
-\subsubsubsection{Page 1}
+\subsubsubsection{General idea and the supporting Variables}
+The basics of the perspective we have tried to implement evolve around knowing which objects are displayed within our scene and where they roughly are located. The two primary components needed therefore are the camera as well as the center of the scene (calculated via all displayed objects).
+These components allow us to build a theoretical centre-plane for our scene, which is always being oriented according to the viewing direction of the camera. The origin of that centre-plane (assigned with the letter 'd' below) will then serve us for every aspect described in the following chapters and can interpreted as the generalized rotation centre of the complete scene.
+
 \begin{itemize}
 	\item[] aspect ratio $= 1$
 	\item[] $\alpha = fov$
 	\item[] $\overrightarrow{s}=$ centroid position
 	\item[] $\overrightarrow{c}=$ camera position
-	\item[] $\overrightarrow{l}=$ look at position $|\overrightarrow{l}|= 1$ 
+	\item[] $\overrightarrow{l}=$ look at direction (normalized camera front) $|\overrightarrow{l}|= 1$ 
 	\item[] $\overrightarrow{d}=$ rotation centre (must be recalculated at each beginning of an operation)
+	\item[] $P$ = A point located within the scene, but also displayed directly on the screen
 	\item[] 
 \end{itemize}
 Visualization:
@@ -414,14 +418,9 @@ Visualization:
 	\includegraphics[width=0.5\textwidth]{perspective_image1}
 \end{figure}
 
-Display of point $P$ on screen:
-
-\centerline{$\overrightarrow{d} = \overrightarrow{c} +\left[ \left(\overrightarrow{s} -\overrightarrow{c}\right)\cdot \overrightarrow{l}\right] \overrightarrow{l} $}
-
-$X - $Coord $x$
-
-\centerline{$\boxed{ 2 \left(\dfrac{x - x_{0}}{screen width} - 0.5\right)\cdot tan \left(\dfrac{\alpha}{2}\right) = tan(\varphi)}$}
-
+Display of point $P$ on screen:\newline
+$X$/$Y$-Coordinates on screen for Point $P$ \newline
+\centerline{$\boxed{ 2 \left(\dfrac{x - x_{0}}{screen-width/-height} - 0.5\right)\cdot tan \left(\dfrac{\alpha}{2}\right) = tan(\varphi)}$}
 Where: 
 
 $x_{0} =$ left Pixel
@@ -430,7 +429,8 @@ $w$ = screen width
 
 
 
-\subsubsubsection{Page 2 Zoom}
+\subsubsubsection{Zoom}
+This approach to a zoom implementation does not use a change of the field of view (FoV) of the used camera, but simply works with changes in position of it. Instead of simply using the look at direction (camera front) and a preselected speed value, the formula used here defines a zoom factor and calculates a new position for the camera based thereon. If this zoom factor was set to the value $2$ for example, the camera would move to the position, where the whole image appears to be roughly two times the size of what it was before.
 
 Per scroll-wheel rotation:
 
@@ -451,16 +451,19 @@ Per scroll-wheel rotation:
  		$\Leftrightarrow  |\overrightarrow{c}_{new} - \overrightarrow{d}| = |\overrightarrow{c}_{old} - \overrightarrow{d}| \cdot v^{-r} $ & \\
  		$\overrightarrow{c}_{new} - \overrightarrow{d} ||\overrightarrow{c}_{old} - \overrightarrow{d} $ & \\
  		$\Leftrightarrow \boxed{\overrightarrow{c}_{new} =  \overrightarrow{d} + v^{-r}\left(\overrightarrow{c}_{old} - \overrightarrow{d}\right) }$  & \\
-		& 		\centerline{\framebox[1.1\width]{Problem, if $\overrightarrow{c} = \overrightarrow{d}$ (correspond with infinite stark Enlargement)}} \par  \\
-		& 		\centerline{Adjustment of near and far plane not necessary.} \par  \\
+		& 		\centerline{\framebox[1.1\width]{Problem, if $\overrightarrow{c} = \overrightarrow{d}$ (corresponds to infinite enlargement)}} \par  \\
  	\end{tabular}
  \end{table}
 
-\subsubsubsection{Page 3 Shift Point}
+\subsubsubsection{Shifting Motion (Hand-Movement)}
+The theory behind this aspect of camera movement is for what is referred to as hand-movement in other applications and occurs when the user selects a pixel on the screen with the mouse cursor and then drags (mouse-key held down) the cursor a new pixel, on which he releases the key again.
+This approach does not pay too much attention to the position calculated within the world-space with the \verb|readPixel| command, that uses the X- and Y-coordinates of a selected pixel on the screen. Instead it projects the two selected points onto the centre-plane mentioned above and then calculates the distance between those two values. This determined distance is then used to move the camera to a new position so whichever point the cursor was released on appears to have moved to the starting point of the executed dragging motion.
+
+
 Shift Point with Coordinates $x$ to $x'$ \\
 
-\noindent\textbf{3a} \\
-Formal correct Shift of selected Point. This work only if a Point with $z > -1$ is selected. If the Point is on the Plane, $z = -1$, fall-back to 3b.
+\noindent\textbf{Approach $a$:} \\
+Formally correct shift of selected point based on the centre of the object it was located on. This approach only works if a point on any \gls{mesh} displayed within the scene (with $z > -1$) was selected and correctly identified by the \verb|readPixel| command. If that condition is not met, a fall-back to approach $b$ is required.
 
 \begin{figure}[h!]
 	\centering
@@ -484,11 +487,12 @@ Conversion of Screen Coordinates of $P'$ and $P$ in 3-D direction according to C
 	& \overrightarrow{l} = \overrightarrow{l}_{z} & \overrightarrow{l}_{x} = \dfrac{\overrightarrow{l} \times \overrightarrow{n}}{|\overrightarrow{l}\times \overrightarrow{n}|} &   & \overrightarrow{l}_{y} = \overrightarrow{l}_{x} \times \overrightarrow{l}_{z} &   
 \end{align*}
 
-\noindent\textbf{3b} \newline
+\noindent\textbf{Approach $b$:} \newline
 
-3b has the advantage of working with all the points on the screen and not only for Points on the \gls{mesh}. It bases on a shift velocity independent of the selected point, velocity which is inverse proportional to the enlargement factor.
+This approach has the advantage of working with all points on the screen and not only for those on any given \gls{mesh}. It is based on a shifting velocity independent of the selected start and end points of the dragging motion, where the velocity is inverse proportional to the enlargement factor. 
+This also results in the effect, that the mouse cursor ends up being inaccurate and therefore misleading for the user. This mouse-cursor issue can be avoided if the selected pixel is marked in the model, but the mouse cursor hidden afterwards. At operation's end the mouse cursor can be set back in the starting position using the \verb|SetCursor| command and the previously determined position. \newline
 
-The selected point doesn't correspond exactly with the mouse pointer.
+
 \begin{align*} 
 	Modified:  dist &= \left( \overrightarrow{s} - \overrightarrow{c}_{old}\right) \cdot \overrightarrow{l} \\
 	\Rightarrow \Delta\overrightarrow{p} &= \dfrac{2tan\left(\dfrac{\alpha}{2}\right)\left(\overrightarrow{s} - \overrightarrow{c}_{old}\right) \cdot \overrightarrow{l}}{w} \left(\overrightarrow{p}'_{s} - \overrightarrow{p}_{s} \right)  \\
@@ -496,22 +500,20 @@ The selected point doesn't correspond exactly with the mouse pointer.
 	\overrightarrow{c}_{new} &= \overrightarrow{c}_{old} - \Delta \overrightarrow{p}
 \end{align*}
 
-\centerline{\framebox[1.1\width]{Problem, if $\overrightarrow{c}_{old}$  lays on the Centroid-plain (infinite Enlargement $\mathrel{\widehat{=}}$ 0-shift factor)  }} \par  
+\centerline{\framebox[1.1\width]{Problem, if $\overrightarrow{c}_{old}$  is located on the centre-plane (infinite enlargement $\mathrel{\widehat{=}}$ 0-shift factor)  }} \par  
 
-\noindent This mouse-cursor problematic can be avoided when the selected pixel is marked in the model and the mouse cursor hidden. At operation's end the mouse cursor can be set back in the right position with \verb|SetCursor|. \newline
 
-\subsubsubsection{Page 4 Rotations}
 
-\noindent The rotation should be around the $d$ axis or rotation center. There are different rotation concepts, f. e. arcball. 
-The rotation concept explained here bases on a constant rotation velocity.
-The costs of this approach is that a point can not be fix connected to the mouse cursor. This can only be possible with low rotation velocity.
+\subsubsubsection{Rotations}
+There are multiple concepts such as the \verb|arcball| available in order to perform a rotation within a scene based on a selected point. The approach we intend to use here is based around the $d$ axis also referred to as rotation centre within this chapter and uses a constant rotation velocity.
+The potentially negative aspect of this approach for the user is, that the rotation performed after selecting an initial starting point can not be reliably connected to the mouse cursor. This is only be possible with a low rotation velocity, but appears to be more appealing when compared to the alternative of inconsistent speeds.
 
 Assumption: the rotation around the pixel distance $\sqrt{\Delta x^{2} + \Delta y^{2}}$ is $\dfrac{\sqrt{\Delta x^{2} + \Delta y^{2}}}{w} \cdot \beta $ (f.e. $\beta = T_{0} $)
 
 Rotation Axis: We divide the rotation in 2 parts:
 \begin{itemize}
-	\item[] Rotation of $\left(\dfrac{x}{y}\right)$ around the middle of the image
-	\item[] After that, rotation from the middle of the image to $ \left(\dfrac{x'}{y'} \right)$
+	\item[] Rotation of $\left(\dfrac{x}{y}\right)$ around the centre of the scene
+	\item[] After that, rotation from the centre of the scene to $ \left(\dfrac{x'}{y'} \right)$
 \end{itemize}
 
 In both rotations the plane perpendicular to the rotation axis contains the points $\overrightarrow{c}$ and $\overrightarrow{d}$, and additionally either the point $ \overrightarrow{c} + \left(\begin{smallmatrix}tan (\alpha_{x}) \\ tan (\alpha_{y}) \\ 1\end{smallmatrix}\right) $ or $ \overrightarrow{c} + \left(\begin{smallmatrix}tan (\alpha_{x'}) \\ tan (\alpha_{y'}) \\ 1\end{smallmatrix}\right) $

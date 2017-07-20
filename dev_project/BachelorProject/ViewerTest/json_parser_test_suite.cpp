@@ -7,89 +7,81 @@
 
 void test_not_existing_json_file() {
 	JsonReader reader{};
-	ASSERT_THROWS(reader.parseJsonFile("foo") , std::invalid_argument);
+	ASSERT_THROWS(reader.parseJsonFile("foo"), std::invalid_argument);
 }
 
 void test_display_reference_cube() {
 	JsonReader reader{};
 	reader.parseJsonFile("data/testConfigCustom.json");
-	reader.setUpConfigurationData();
-	ASSERT(true, ConfigurationData().displayReferenceCube);
+	ASSERT_EQUAL(false, reader.isReferenceCubeActivated());
 }
 
 void test_frequency() {
 	JsonReader reader{};
 	reader.parseJsonFile("data/testConfigCustom.json");
-	reader.setUpConfigurationData();
-	ASSERT_EQUAL_DELTA(100, ConfigurationData().frequency, 0.00);
+	ASSERT_EQUAL_DELTA(100, reader.getFrequency(), 0.00);
 }
 
 void test_referenceSphere1() {
 	JsonReader reader{};
 	reader.parseJsonFile("data/testConfigCustom.json");
-	reader.setUpConfigurationData();
-	ASSERT_EQUAL_DELTA(1.1, ConfigurationData().referenceSphere1.x, 0.01);
-	ASSERT_EQUAL_DELTA(-1.1, ConfigurationData().referenceSphere1.y, 0.01);
-	ASSERT_EQUAL_DELTA(2.2, ConfigurationData().referenceSphere1.z, 0.02);
+	ASSERT_EQUAL_DELTA(1.1, reader.getReferenceSphere1().x, 0.01);
+	ASSERT_EQUAL_DELTA(-1.1, reader.getReferenceSphere1().y, 0.01);
+	ASSERT_EQUAL_DELTA(2.2, reader.getReferenceSphere1().z, 0.02);
 }
 
 void test_referenceSphere2() {
 	JsonReader reader{};
 	reader.parseJsonFile("data/testConfigCustom.json");
-	reader.setUpConfigurationData();
-	ASSERT_EQUAL_DELTA(5.5, ConfigurationData().referenceSphere2.x, 0.00);
-	ASSERT_EQUAL_DELTA(-2.26, ConfigurationData().referenceSphere2.y, 0.01);
-	ASSERT_EQUAL_DELTA(6.82, ConfigurationData().referenceSphere2.z, 0.01);
+	ASSERT_EQUAL_DELTA(5.5, reader.getReferenceSphere2().x, 0.00);
+	ASSERT_EQUAL_DELTA(-2.26, reader.getReferenceSphere2().y, 0.01);
+	ASSERT_EQUAL_DELTA(6.82, reader.getReferenceSphere2().z, 0.01);
 }
 
 void test_referenceSphere3() {
 	JsonReader reader{};
 	reader.parseJsonFile("data/testConfigCustom.json");
-	reader.setUpConfigurationData();
-	ASSERT_EQUAL_DELTA(2.59, ConfigurationData().referenceSphere3.x, 0.01);
-	ASSERT_EQUAL_DELTA(-0.21, ConfigurationData().referenceSphere3.y, 0.01);
-	ASSERT_EQUAL_DELTA(7.69, ConfigurationData().referenceSphere3.z, 0.01);
+	ASSERT_EQUAL_DELTA(2.59, reader.getReferenceSphere3().x, 0.01);
+	ASSERT_EQUAL_DELTA(-0.21, reader.getReferenceSphere3().y, 0.01);
+	ASSERT_EQUAL_DELTA(7.69, reader.getReferenceSphere3().z, 0.01);
 }
 
 void test_calibrationVertex1() {
 	JsonReader reader{};
 	reader.parseJsonFile("data/testConfigCustom.json");
-	reader.setUpConfigurationData();
-	ASSERT_EQUAL_DELTA(-8.96, ConfigurationData().calibrationVertex1.x, 0.01);
-	ASSERT_EQUAL_DELTA(-23.84, ConfigurationData().calibrationVertex1.y, 0.01);
-	ASSERT_EQUAL_DELTA(3.24, ConfigurationData().calibrationVertex1.z, 0.01);
+	ASSERT_EQUAL_DELTA(-8.96, reader.getCalibrationVertex1().x, 0.01);
+	ASSERT_EQUAL_DELTA(-23.84, reader.getCalibrationVertex1().y, 0.01);
+	ASSERT_EQUAL_DELTA(3.24, reader.getCalibrationVertex1().z, 0.01);
 }
 
 void test_calibrationVertex2() {
 	JsonReader reader{};
 	reader.parseJsonFile("data/testConfigCustom.json");
-	reader.setUpConfigurationData();
-	ASSERT_EQUAL_DELTA(8.76, ConfigurationData().calibrationVertex2.x, 0.01);
-	ASSERT_EQUAL_DELTA(-33.9, ConfigurationData().calibrationVertex2.y, 0.01);
-	ASSERT_EQUAL_DELTA(40.1, ConfigurationData().calibrationVertex2.z, 0.01);
+	ASSERT_EQUAL_DELTA(8.76, reader.getCalibrationVertex2().x, 0.01);
+	ASSERT_EQUAL_DELTA(-33.9, reader.getCalibrationVertex2().y, 0.01);
+	ASSERT_EQUAL_DELTA(40.1, reader.getCalibrationVertex2().z, 0.01);
 }
 
 void test_calibrationVertex3() {
 	JsonReader reader{};
 	reader.parseJsonFile("data/testConfigCustom.json");
-	reader.setUpConfigurationData();
-	ASSERT_EQUAL_DELTA(0.43, ConfigurationData().calibrationVertex3.x, 0.01);
-	ASSERT_EQUAL_DELTA(7.04, ConfigurationData().calibrationVertex3.y, 0.01);
-	ASSERT_EQUAL_DELTA(5.14, ConfigurationData().calibrationVertex3.z, 0.01);
+	ASSERT_EQUAL_DELTA(0.43, reader.getCalibrationVertex3().x, 0.01);
+	ASSERT_EQUAL_DELTA(7.04, reader.getCalibrationVertex3().y, 0.01);
+	ASSERT_EQUAL_DELTA(5.14, reader.getCalibrationVertex3().z, 0.01);
 }
 
 void test_mvmFilePath() {
 	JsonReader reader{};
 	reader.parseJsonFile("data/testConfigCustom.json");
-	reader.setUpConfigurationData();
-	ASSERT(true, std::strcmp("../Viewer/DemoData/mvm_File/foo.mvm", ConfigurationData().pathToMvmFile));
+	std::string expected{ "../Viewer/DemoData/mvm_File/foo.mvm" };
+	ASSERT_EQUAL(expected, reader.getPathToMvmFile());
 }
 
 void test_mvmReferenceFilePath() {
 	JsonReader reader{};
 	reader.parseJsonFile("data/testConfigCustom.json");
-	reader.setUpConfigurationData();
-	ASSERT(true, std::strcmp("../Viewer/DemoData/mvm_File/foo2.mvm", ConfigurationData().pathToMvmRefFile));
+	std::string expected{ "../Viewer/DemoData/mvm_File/foo2.mvm" };
+	ASSERT_EQUAL(expected, reader.getPathToMvmReferenceFile());
 }
 
 
@@ -102,23 +94,21 @@ void test_stlFilesPaths() {
 		"../Viewer/DemoData/stl_File/foo5.stl",
 		"../Viewer/DemoData/stl_File/foo6.stl",
 		"../Viewer/DemoData/stl_File/foo7.stl"
-		};
+	};
 	JsonReader reader{};
 	reader.parseJsonFile("data/testConfigCustom.json");
-	reader.setUpConfigurationData();
-	auto index{0};
-	for_each(stlFiles.cbegin(), stlFiles.cend(), [&] (const auto expectedFilepath) {
-	         ASSERT_EQUAL(expectedFilepath, ConfigurationData().stlFiles.at(index));
-	         index++;
-         });
+	auto index{ 0 };
+	for_each(stlFiles.cbegin(), stlFiles.cend(), [&](const auto expectedFilepath) {
+		ASSERT_EQUAL(expectedFilepath, reader.getStlFilePaths().at(index));
+		index++;
+	});
 }
 
 void test_screen_measures() {
 	JsonReader reader{};
 	reader.parseJsonFile("data/testConfigCustom.json");
-	reader.setUpConfigurationData();
-	ASSERT_EQUAL(192, ConfigurationData().screenWidth);
-	ASSERT_EQUAL(108, ConfigurationData().screenHeight);
+	ASSERT_EQUAL(192, reader.getScreenWidth());
+	ASSERT_EQUAL(108, reader.getScreenHeight());
 
 }
 

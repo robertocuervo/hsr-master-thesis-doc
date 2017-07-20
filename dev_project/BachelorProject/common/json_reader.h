@@ -1,26 +1,25 @@
 #pragma once
 #include <json/json.h>
-#include "../Viewer/config.h"
-
+#include <glm/detail/type_vec3.hpp>
 
 class JsonReader {
 
 public:
-	JsonReader();
 	void parseJsonFile(const std::string pathToJsonFile);
-	void setUpConfigurationData() const;
+	glm::vec3 getReferenceSphere1() const;
+	glm::vec3 getReferenceSphere2() const;
+	glm::vec3 getReferenceSphere3() const;
+	glm::vec3 getCalibrationVertex1() const;
+	glm::vec3 getCalibrationVertex2() const;
+	glm::vec3 getCalibrationVertex3() const;
+	std::vector<std::string> getStlFilePaths() const;
+	double getFrequency() const;
+	bool isReferenceCubeActivated() const;
+	std::string getPathToMvmFile() const;
+	std::string getPathToMvmReferenceFile() const;
+	int getScreenWidth() const;
+	int getScreenHeight() const;
 private:
 	Json::Value root;
-	ConfigurationData configurationData;
-	void getReferenceSphere1() const;
-	void getReferenceSphere2() const;
-	void getReferenceSphere3() const;
-	void getCalibrationVertex1() const;
-	void getCalibrationVertex2() const;
-	void getCalibrationVertex3() const;
-	void getStlFilePaths() const;
-	void getFrequency() const;
-	void getReferenceCubeBoolean() const;
-	void getPathsToMvmFiles() const;
-	void getScreenMeasures() const;
+
 };

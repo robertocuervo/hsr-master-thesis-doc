@@ -4,12 +4,9 @@
 #include "scene.h"
 #include "../common/json_reader.h"
 
-GameController::GameController(): uiController()
-{
-}
+GameController::GameController(): uiController() {}
 
-void GameController::init(const std::string pathToJsonConfig)
-{
+void GameController::init(const std::string pathToJsonConfig) {
 	this->loadConfigurationFromJsonFile(pathToJsonConfig);
 	this->initGLFW();
 	this->setUpControllers();
@@ -19,25 +16,20 @@ void GameController::init(const std::string pathToJsonConfig)
 	this->initalizeDisplayableComponents();
 }
 
-void GameController::gameLoop()
-{
-	while (uiController.runLoop)
-	{
-		for (auto component : displayableComponents)
-		{
+void GameController::gameLoop() {
+	while (uiController.runLoop) {
+		for (auto component : displayableComponents) {
 			component->update(&uiController);
 			component->render(&uiController);
 		}
 	}
 }
 
-void GameController::finish() const
-{
+void GameController::finish() const {
 	glfwTerminate();
 }
 
-void GameController::initGLFW() const
-{
+void GameController::initGLFW() const {
 	glfwInit();
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
@@ -46,44 +38,36 @@ void GameController::initGLFW() const
 	glfwWindowHint(GLFW_DECORATED, GL_FALSE);
 }
 
-void GameController::initializeGLEW() const
-{
+void GameController::initializeGLEW() const {
 	glewExperimental = GL_TRUE;
-	if (glewInit() != GLEW_OK)
-	{
+	if (glewInit() != GLEW_OK) {
 		throw std::runtime_error("glewInit failed");
 	}
 }
 
-void GameController::defineViewPortDimensions() const
-{
-	glViewport(0, 0, ConfigurationData().screenWidth, ConfigurationData().screenHeight);
+void GameController::defineViewPortDimensions() const {
+	glViewport(0, 0, ConfigurationData().getScreenWidth(), ConfigurationData().getScreenHeight());
 }
 
-void GameController::setupOpenG_Options() const
-{
+void GameController::setupOpenG_Options() const {
 	glEnable(GL_DEPTH_TEST);
 	//glEnable(GL_CULL_FACE);
 	//glCullFace(GL_BACK);
 }
 
-void GameController::initalizeDisplayableComponents()
-{
+void GameController::initalizeDisplayableComponents() {
 	std::shared_ptr<Scene> scene(new Scene);
 	scene->init();
 	this->uiController.setCameraPosition(scene->max);
+	this->uiController.setSceneCenter(scene->center);
 	this->displayableComponents.push_back(std::move(scene));
 }
 
-void GameController::setUpControllers()
-{
+void GameController::setUpControllers() {
 	this->uiController.init();
 	this->uiController.setCallbackFunctions();
 }
 
 void GameController::loadConfigurationFromJsonFile(const std::string pathToJsonConfig) const {
-
-	JsonReader jsonReader{};
-	jsonReader.parseJsonFile(pathToJsonConfig);
-	jsonReader.setUpConfigurationData();
+	ConfigurationData().parseConfigFile(pathToJsonConfig);
 }

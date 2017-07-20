@@ -13,15 +13,15 @@ bool check_range(const T value, const T min, const T max) {
 
 
 Frame calculateReferenceFrame(std::vector<Frame> const referenceFrames) {
-	std::vector<glm::vec3> sumPositions{18};
-	glm::vec3 sumPosition{0.0f};
+	std::vector<glm::vec3> sumPositions{ 18 };
+	glm::vec3 sumPosition{ 0.0f };
 	std::for_each(referenceFrames.cbegin(), referenceFrames.cend(), [&](const auto frame) {
-	              for (auto i = 0; i < 18; i++) {
-		              sumPositions.at(i).x += frame.leds.at(i).ledPosition.x;
-		              sumPositions.at(i).y += frame.leds.at(i).ledPosition.y;
-		              sumPositions.at(i).z += frame.leds.at(i).ledPosition.z;
-	              }
-              });
+		for (auto i = 0; i < 18; i++) {
+			sumPositions.at(i).x += frame.leds.at(i).ledPosition.x;
+			sumPositions.at(i).y += frame.leds.at(i).ledPosition.y;
+			sumPositions.at(i).z += frame.leds.at(i).ledPosition.z;
+		}
+	});
 	auto referenceFrame = referenceFrames.at(0);
 	for (auto i = 0; i < 18; i++) {
 		referenceFrame.leds.at(i).ledPosition.x = sumPositions.at(i).x / referenceFrames.size();
@@ -31,7 +31,6 @@ Frame calculateReferenceFrame(std::vector<Frame> const referenceFrames) {
 	return referenceFrame;
 }
 
-//void Scene::generateTargetFrames(const char* pathToMvmFile, const char* pathToMvmRefFile) {
 void Scene::generateTargetFrames(const std::string pathToMvmFile, const std::string pathToMvmRefFile) {
 	auto referenceFrames = MvmFileManager().getFramesFromMvmFile(pathToMvmRefFile);
 	this->frames = MvmFileManager().getFramesFromMvmFile(pathToMvmFile);
@@ -39,29 +38,29 @@ void Scene::generateTargetFrames(const std::string pathToMvmFile, const std::str
 	//auto firstFrame = calculateReferenceFrame(referenceFrames); //useForReferenceMVM
 	auto firstFrame = frames.at(0);
 
-	auto originData = MatrixCalculator().calculateTransformData(this->configurationData.calibrationVertex1, this->configurationData.calibrationVertex2, this->configurationData.calibrationVertex3);
-	auto anatomyData = MatrixCalculator().calculateTransformData(this->configurationData.referenceSphere1, this->configurationData.referenceSphere2, this->configurationData.referenceSphere3);
+	auto originData = MatrixCalculator().calculateTransformData(ConfigurationData().getCalibrationVertex1(), ConfigurationData().getCalibrationVertex2(), ConfigurationData().getCalibrationVertex3());
+	auto anatomyData = MatrixCalculator().calculateTransformData(ConfigurationData().getReferenceSphere1(), ConfigurationData().getReferenceSphere2(), ConfigurationData().getReferenceSphere3());
 	auto transformMatrixOriginToAnatomy = MatrixCalculator().calculateTransformationMatrix(originData, anatomyData);
 	std::for_each(firstFrame.leds.begin(), firstFrame.leds.end(), [&](MvmLed& led) {
-	              led.ledPosition = glm::vec3(transformMatrixOriginToAnatomy * glm::vec4(led.ledPosition, 1.0f));
-              });
+		led.ledPosition = glm::vec3(transformMatrixOriginToAnatomy * glm::vec4(led.ledPosition, 1.0f));
+	});
 	frames.erase(frames.begin());
 	std::for_each(frames.begin(), frames.end(), [&](auto frame) {
-	              std::for_each(frame.leds.begin(), frame.leds.end(), [&](auto& led) {
-	                            led.ledPosition = glm::vec3(transformMatrixOriginToAnatomy * glm::vec4(led.ledPosition, 1.0f));
-                            });
+		std::for_each(frame.leds.begin(), frame.leds.end(), [&](auto& led) {
+			led.ledPosition = glm::vec3(transformMatrixOriginToAnatomy * glm::vec4(led.ledPosition, 1.0f));
+		});
 
-	              this->targetFrames.push_back(TargetFrame(firstFrame, frame));
-              });
+		this->targetFrames.push_back(TargetFrame(firstFrame, frame));
+	});
 	this->firstCall = true;
 }
 
 void Scene::init() {
-	this->setupShader(this->configurationData.vertexPath, this->configurationData.fragmentPath);
-	this->loadMeshesFromStlFiles(ConfigurationData().stlFiles);
-	this->generateTargetFrames(ConfigurationData().pathToMvmFile, ConfigurationData().pathToMvmRefFile);
+	this->setupShader(ConfigurationData().vertexPath, ConfigurationData().fragmentPath);
+	this->loadMeshesFromStlFiles(ConfigurationData().getStlFilesPaths());
+	this->generateTargetFrames(ConfigurationData().getPathToMvmFile(), ConfigurationData().getPathToMvmRefFile());
 	this->cube.setUp();
-	this->cameraLeds.setUp(ConfigurationData().pathToMvmFile);
+	this->cameraLeds.setUp(ConfigurationData().getPathToMvmFile());
 }
 
 
@@ -72,9 +71,9 @@ void calculateFPS() {
 	double currentTime = glfwGetTime();
 	nbFrames++;
 	if (currentTime - lastTime >= 1.0) { // If last prinf() was more than 1 sec ago
-		// printf and reset timer
+										 // printf and reset timer
 		std::cout << "ms/frame\n" << 1000.0 / double(nbFrames);
-		std::cout << "FPS\n" << 1 / (1000.0 / double(nbFrames));
+		std::cout << "FPS\n" << 1 / (1000.0 / double(nbFrames)) << std::endl;
 		nbFrames = 0;
 		lastTime += 1.0;
 	}
@@ -93,26 +92,25 @@ void Scene::updateSceneMinMax(const glm::vec3 minVector, const glm::vec3 maxVect
 	auto maxRadY = glm::max(glm::distance(this->center.y, min.y), glm::distance(this->center.y, max.y));
 	auto maxRadZ = glm::max(glm::distance(this->center.z, min.z), glm::distance(this->center.z, max.z));
 	this->maxRadius = glm::length(glm::max(maxRadX, glm::max(maxRadY, maxRadZ)));
+	
 }
 
 void Scene::loadMeshesFromStlFiles(const std::vector<std::string> stlFiles) {
-	//TODO handle possible file I/O exceptions, maybe send them to gui?
-	for_each(stlFiles.cbegin(), stlFiles.cend(), [&](const auto filePath) {
-	         Mesh mesh{};
-	         mesh.loadMeshDataFromStlFile(filePath);
-	         mesh.setupMesh();
-	         this->updateSceneMinMax(mesh.min, mesh.max);
-	         if (filePath.find(std::string("Mandibular")) != std::string::npos ||
-		         filePath.find(std::string("CL")) != std::string::npos ||
-		         filePath.find(std::string("CR")) != std::string::npos)
-		         mesh.stationary = false;
-	         this->meshes.push_back(mesh);
-         });
+	for_each(stlFiles.cbegin(), stlFiles.cend(), [&](const auto filePath) {	
+		Mesh mesh{};
+		mesh.loadMeshDataFromStlFile(filePath);
+		mesh.setupMesh();
+		this->updateSceneMinMax(mesh.min, mesh.max);
+		if (filePath.find(std::string("Mandibular")) != std::string::npos ||
+			filePath.find(std::string("CL")) != std::string::npos ||
+			filePath.find(std::string("CR")) != std::string::npos)
+			mesh.stationary = false;
+		this->meshes.push_back(mesh);
+	});
 }
 
 
-Scene::Scene(): maxRadius(0.0) {
-	this->configurationData = ConfigurationData{};
+Scene::Scene() : maxRadius(0.0) {
 	this->cube = Cube{};
 	this->cameraLeds = CameraLeds{};
 }
@@ -134,7 +132,7 @@ void Scene::clearColorBuffer(const GLclampf red, const GLclampf green, const GLc
 }
 
 void Scene::setLightsProperties() const {
-	glUniform3f(glGetUniformLocation(this->shader.getProgram(), ConfigurationData().uniformLightAmbient), GLfloat{0.2f}, GLfloat{0.2f}, GLfloat{0.2f});
+	glUniform3f(glGetUniformLocation(this->shader.getProgram(), ConfigurationData().uniformLightAmbient), GLfloat{ 0.2f }, GLfloat{ 0.2f }, GLfloat{ 0.2f });
 	glUniform3f(glGetUniformLocation(this->shader.getProgram(), ConfigurationData().uniformLightDiffuse), 0.5f, 0.5f, 0.5f);
 	glUniform3f(glGetUniformLocation(this->shader.getProgram(), ConfigurationData().uniformLightSpecular), 1.0f, 1.0f, 1.0f);
 }
@@ -145,17 +143,17 @@ void Scene::setMaterialProperties() const {
 
 void Scene::drawMeshes(const Shader shader, const TargetFrame targetFrame) const {
 	std::for_each(this->meshes.cbegin(), this->meshes.cend(), [&](const Mesh mesh) {
-	              glm::mat4 normMatrix;
-	              if (mesh.stationary) {
-		              //this->translateModel(shader, targetFrame.baseTransformMatrix); //useForReferenceMVM
-		              this->translateModel(shader, normMatrix);
-	              }
-	              else {
-		              //this->translateModel(shader, targetFrame.baseTransformMatrix * targetFrame.transformMatrix); //useForReferenceMVM
-		              this->translateModel(shader, glm::inverse(targetFrame.baseTransformMatrix) * targetFrame.transformMatrix);
-	              }
-	              mesh.Draw(shader);
-              });
+		glm::mat4 normMatrix;
+		if (mesh.stationary) {
+			//this->translateModel(shader, targetFrame.baseTransformMatrix); //useForReferenceMVM
+			this->translateModel(shader, normMatrix);
+		}
+		else {
+			//this->translateModel(shader, targetFrame.baseTransformMatrix * targetFrame.transformMatrix); //useForReferenceMVM
+			this->translateModel(shader, glm::inverse(targetFrame.baseTransformMatrix) * targetFrame.transformMatrix);
+		}
+		mesh.Draw(shader);
+	});
 }
 
 
@@ -185,7 +183,7 @@ size_t Scene::getFrameIndex(const GLfloat currentTime) {
 			return 0;
 	}
 	auto length = this->frames.size();
-	auto maxDuration = length / ConfigurationData().frequency;;
+	auto maxDuration = length / ConfigurationData().getFrequency();;
 	auto currentPercentage = (currentTime - initTime) / maxDuration;
 	size_t index = currentPercentage * length;
 	if (index >= length - 1) {
@@ -210,6 +208,7 @@ void Scene::update(UIController* uiController) {
 }
 
 void Scene::render(UIController* uiController) {
+
 	calculateFPS();
 	auto frameIndex = this->getFrameIndex(this->lastFrame);
 	glfwPollEvents();
@@ -218,5 +217,6 @@ void Scene::render(UIController* uiController) {
 	this->drawMeshes(this->shader, targetFrames[frameIndex]);
 	this->cube.render(uiController);
 	this->cameraLeds.render(uiController);
+
 	glfwSwapBuffers(uiController->GetWindow());
 }

@@ -2,6 +2,8 @@
 #include <algorithm>
 #include <numeric>
 #include "config.h"
+#include <glm/detail/func_geometric.inl>
+#include <iostream>
 
 void Mesh::setShininess(const Shader shader, const GLfloat value) const {
 	glUniform1f(glGetUniformLocation(shader.getProgram(), ConfigurationData().uniformMaterialShininess), value);
@@ -43,6 +45,7 @@ void Mesh::loadMeshDataFromStlFile(const std::string filePath) {
 	stl::StlFileManager stlFileManager{};
 	//TODO:	handle exceptions from parse_stl_file here or in caller
 	auto stlData = stlFileManager.parse_stl_file(filePath);
+	this->meshName = filePath;
 	this->vertices = this->getVerticesFromStlData(stlData);
 	this->indices = this->getIndicesFromStlData(stlData);
 }
@@ -69,6 +72,7 @@ std::vector<Vertex> Mesh::getVerticesFromStlData(const stl::StlData stlData) {
 			vertices.push_back(vertex);
 		}
 	}
+	this->calculateMeshCentroid();
 	return vertices;
 }
 
@@ -76,4 +80,9 @@ std::vector<GLuint> Mesh::getIndicesFromStlData(const stl::StlData stlData) cons
 	std::vector<GLuint> indices(stlData.triangles.size() * 3 - 1);
 	std::iota(indices.begin(), indices.end(), 0);
 	return indices;
+}
+
+glm::vec3 Mesh::calculateMeshCentroid() const {
+	std::cout << this->meshName  <<": Centroid X: " << (this->max.x - this->min.x)/ 2  << " Y:" << (this->max.y - this->min.y)/ 2 << " Z: " << (this->max.z - this->min.z) / 2 << std::endl;
+	return glm::vec3((this->max.x - this->min.x)/ 2, (this->max.y - this->min.y)/ 2, (this->max.z - this->min.z) / 2);
 }

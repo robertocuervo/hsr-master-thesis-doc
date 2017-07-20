@@ -31,6 +31,8 @@ protected:
 	GLuint VAO, VBO, EBO;
 	std::vector<Vertex> vertices;
 	std::vector<GLuint> indices;
+	glm::vec3 meshCentroid;
+	std::string meshName;
 
 	/**
 	* \brief Set each mesh's shininess property to a default value
@@ -42,5 +44,6 @@ protected:
 	void updateMeshMinMax(const glm::vec3 vector);
 	std::vector<Vertex> getVerticesFromStlData(const stl::StlData stlData);
 	std::vector<GLuint> getIndicesFromStlData(const stl::StlData stlData) const;
+	glm::vec3 calculateMeshCentroid() const;
 };
 #endif

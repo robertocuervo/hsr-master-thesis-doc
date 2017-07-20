@@ -86,9 +86,7 @@ std::vector<MvmLed> MvmFileManager::getLedsFromCameras(const MvmFileCamera camer
 	std::vector<MvmLed> result{};
 	for (size_t index = 0, ilen = camera1.convertedLeds.size(); index < ilen; ++index) {
 		MvmLed led{};
-		//		led.initPositions(camera1.convertedLeds.at(index), camera3.convertedLeds.at(index), -camera2.convertedLeds.at(index));
 		led.initPositions(camera1.convertedLeds.at(index), camera2.convertedLeds.at(index), camera3.convertedLeds.at(index));
-		//		led.initLuminosities(camera1.luminosities.at(index), camera3.luminosities.at(index), camera2.luminosities.at(index));
 		led.initLuminosities(camera1.luminosities.at(index), camera2.luminosities.at(index), camera3.luminosities.at(index));
 		result.push_back(led);
 	}

@@ -31,9 +31,9 @@
             this.panel1 = new System.Windows.Forms.Panel();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.optionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.openConfigurationToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.configurationToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.runAppToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.openConfigurationToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -48,7 +48,6 @@
             this.panel1.Margin = new System.Windows.Forms.Padding(200);
             this.panel1.MaximumSize = new System.Drawing.Size(1920, 1080);
             this.panel1.Name = "panel1";
-            this.panel1.Padding = new System.Windows.Forms.Padding(100);
             this.panel1.Size = new System.Drawing.Size(1600, 920);
             this.panel1.TabIndex = 0;
             // 
@@ -72,6 +71,13 @@
             this.optionsToolStripMenuItem.Size = new System.Drawing.Size(61, 20);
             this.optionsToolStripMenuItem.Text = "Options";
             // 
+            // openConfigurationToolStripMenuItem
+            // 
+            this.openConfigurationToolStripMenuItem.Name = "openConfigurationToolStripMenuItem";
+            this.openConfigurationToolStripMenuItem.Size = new System.Drawing.Size(189, 22);
+            this.openConfigurationToolStripMenuItem.Text = "Open Configuration...";
+            this.openConfigurationToolStripMenuItem.Click += new System.EventHandler(this.openConfigurationToolStripMenuItem_Click);
+            // 
             // configurationToolStripMenuItem
             // 
             this.configurationToolStripMenuItem.Name = "configurationToolStripMenuItem";
@@ -85,13 +91,6 @@
             this.runAppToolStripMenuItem.Size = new System.Drawing.Size(189, 22);
             this.runAppToolStripMenuItem.Text = "Run App";
             this.runAppToolStripMenuItem.Click += new System.EventHandler(this.runAppToolStripMenuItem_Click);
-            // 
-            // openConfigurationToolStripMenuItem
-            // 
-            this.openConfigurationToolStripMenuItem.Name = "openConfigurationToolStripMenuItem";
-            this.openConfigurationToolStripMenuItem.Size = new System.Drawing.Size(189, 22);
-            this.openConfigurationToolStripMenuItem.Text = "Open Configuration...";
-            this.openConfigurationToolStripMenuItem.Click += new System.EventHandler(this.openConfigurationToolStripMenuItem_Click);
             // 
             // openFileDialog1
             // 

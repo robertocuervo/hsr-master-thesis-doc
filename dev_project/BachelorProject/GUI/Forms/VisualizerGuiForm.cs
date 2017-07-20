@@ -25,8 +25,8 @@ namespace GUI
             if (configForm.ShowDialog() == DialogResult.OK)
             {
                 configFilePath = configForm.ConfigFilePath;
+                runApp();
             }
-            runApp();
         }
 
         [DllImport("user32.dll")]
